@@ -1,0 +1,16 @@
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.csproj.AssemblyReference.cache
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.AssemblyInfoInputs.cache
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.AssemblyInfo.cs
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.csproj.CoreCompileInputs.cache
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\ConsoleGUIApp.exe
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\ConsoleGUIApp.deps.json
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\ConsoleGUIApp.runtimeconfig.json
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\ConsoleGUIApp.runtimeconfig.dev.json
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\ConsoleGUIApp.dll
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\ConsoleGUIApp.pdb
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.dll
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\refint\ConsoleGUIApp.dll
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.pdb
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.genruntimeconfig.cache
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ref\ConsoleGUIApp.dll
