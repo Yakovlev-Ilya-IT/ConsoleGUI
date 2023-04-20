@@ -14,3 +14,6 @@ D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\refint\ConsoleGUI
 D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.pdb
 D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.genruntimeconfig.cache
 D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ref\ConsoleGUIApp.dll
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\System.CodeDom.dll
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\bin\Debug\net5.0\System.Management.dll
+D:\Desktop\Diplom\ConsoleGUIApp\ConsoleGUIApp\obj\Debug\net5.0\ConsoleGUIApp.csproj.CopyComplete

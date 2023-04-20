@@ -1,53 +1,52 @@
-﻿using ConsoleGUIApp.Data;
-using ConsoleGUIApp.Drawing;
+﻿using ConsoleGUIApp.Controls.CustomForms;
+using ConsoleGUIApp.Core;
+using ConsoleGUIApp.Data;
 using System;
-
+using System.Linq;
 
 namespace ConsoleGUIApp.Controls
 {
     public class CustomForm: Form
     {
-        public CustomForm()
+        public CustomForm(): base()
         {
-            Form form = new Form();
+            Size = new Size(SafeConsole.Size.Width/3, 10);
+            Position = new Position(SafeConsole.Size.Width / 2 - Size.Width / 2, SafeConsole.Size.Height / 2 - Size.Height / 2);
 
-            form.Position = new Position(2, 2);
-            form.Size = new Size(4, 2);
-            form.BackFocusedColor = ConsoleColor.Green;
-            form.BackUnfocusedColor = ConsoleColor.Yellow;
-            form.FocusedBorderStyle = BorderStyle.None;
-            form.UnfocusedBorderStyle = BorderStyle.None;
+            Label label = new Label();
+            label.Text = "Что нужно открыть?";
+            label.Size = new Size(label.Text.Length, 1);
+            label.Position = new Position(Size.Width / 2 - label.Size.Width / 2, 2);
 
-            Form form2 = new Form();
+            Button firstButton = new Button();
+            firstButton.Text = "Информация о ПК";
+            firstButton.Size = new Size(Size.Width / 3, 3);
+            firstButton.Position = new Position(Size.Width / 2 - firstButton.Size.Width - 5, 4);
+            firstButton.Click += OnFirstButtonClick;
 
-            form2.Position = new Position(9, 2);
-            form2.Size = new Size(4, 2);
-            form2.BackFocusedColor = ConsoleColor.Green;
-            form2.BackUnfocusedColor = ConsoleColor.Yellow;
-            form2.FocusedBorderStyle = BorderStyle.None;
-            form2.UnfocusedBorderStyle = BorderStyle.None;
+            Button secondButton = new Button();
+            secondButton.Text = "Загрузка системы";
+            secondButton.Size = new Size(Size.Width / 3, 3);
+            secondButton.Position = new Position(Size.Width / 2 + 5, 4);
+            secondButton.Click += OnSecondButtonClick;
 
-            Form form3 = new Form();
+            Add(label);
+            Add(firstButton);
+            Add(secondButton);
+        }
 
-            form3.Position = new Position(2, 2);
-            form3.Size = new Size(11, 2);
-            form3.BackFocusedColor = ConsoleColor.Green;
-            form3.BackUnfocusedColor = ConsoleColor.Yellow;
-            form3.FocusedBorderStyle = BorderStyle.None;
-            form3.UnfocusedBorderStyle = BorderStyle.None;
+        private void OnFirstButtonClick()
+        {
+            PCInfoForm pCInfoForm = new PCInfoForm();
+            pCInfoForm.Text = "Информация о ПК";
+            pCInfoForm.Position = new Position(10, 5);
+        }
 
-            Button button = new Button();
-            button.Position = new Position(5, 5);
-            button.Text = "Я кнопка";
-            button.Size = new Size(12, 3);
-            button.BackFocusedColor = ConsoleColor.Green;
-            button.BackUnfocusedColor = ConsoleColor.Black;
-            button.Click += () => Controls.RemoveAt(0);
-
-            Controls.Add(form);
-            Controls.Add(form2);
-            Controls.Add(form3);
-            Controls.Add(button);
+        private void OnSecondButtonClick()
+        {
+            UsageInfoForm usageInfoForm = new UsageInfoForm();
+            usageInfoForm.Text = "Загрузка системы";
+            usageInfoForm.Position = new Position(165, 5);
         }
     }
 }

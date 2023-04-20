@@ -10,17 +10,19 @@ namespace ConsoleGUIApp.Drawing
     {
         private readonly ConsoleBuffer _buffer;
 
-        private List<IDrawable> _content;
+        private IDrawableContentHolder _drawableContentHolder;
         private ConsoleColor _consoleBackColor;
 
-        public ConsoleDrawer(ConsoleColor consoleBackColor, List<IDrawable> content)
+        public ConsoleDrawer(ConsoleColor consoleBackColor, IDrawableContentHolder drawableContentHolder)
         {
             _consoleBackColor = consoleBackColor;
-            _content = new List<IDrawable>(content);
+            _drawableContentHolder = drawableContentHolder;
 
             SafeConsole.UpdateSize(WindowSize);
             _buffer = new ConsoleBuffer(WindowSize);
         }
+
+        private IEnumerable<IDrawable> Content => _drawableContentHolder.Drawables;
 
         private Size BufferSize => _buffer.Size;
         private Size WindowSize => SafeConsole.Size;
@@ -39,7 +41,7 @@ namespace ConsoleGUIApp.Drawing
                 {
                     Position position = new Position(x, y);
 
-                    if (TryDrawForm(position))
+                    if (TryDrawContent(position))
                         continue;
 
                     Cell cell = new Cell().WithBackground(_consoleBackColor);
@@ -50,13 +52,13 @@ namespace ConsoleGUIApp.Drawing
 
         private void Resize(Size size)
         {
-			SafeConsole.UpdateSize(size);
+            SafeConsole.UpdateSize(size);
             _buffer.UpdateSize(size);
         }
 
-        private bool TryDrawForm(Position position)
+        private bool TryDrawContent(Position position)
         {
-            var sortByZIndexDrawables = _content.OrderByDescending(drawable => drawable.ZIndex);
+            var sortByZIndexDrawables = Content.OrderByDescending(drawable => drawable.ZIndex);
 
             foreach (IDrawable drawable in sortByZIndexDrawables)
             {

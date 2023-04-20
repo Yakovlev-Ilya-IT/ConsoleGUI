@@ -2,11 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Platforms>AnyCPU;x64;ARM64</Platforms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Utils\" />
+    <PackageReference Include="OpenHardwareMonitorLibCore" Version="1.0.2" />
+    <PackageReference Include="System.Management" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using ConsoleGUIApp.Data;
+﻿using ConsoleGUIApp.Core;
+using ConsoleGUIApp.Data;
 using ConsoleGUIApp.Drawing;
 using ConsoleGUIApp.Input;
 using System;
@@ -10,15 +11,25 @@ namespace ConsoleGUIApp.Controls
     public class Form: Control
     {
         private Control _activeControl;
+        private List<Control> _focusingContorols = new List<Control>();
+        private List<Control> _unfocusingControls = new List<Control>();
 
-        public string Title { get; set; }
+        public override bool IsTopLevel => true;
 
-        public BorderStyle FocusedBorderStyle { get; set; } = BorderStyle.Double;
-        public BorderStyle UnfocusedBorderStyle { get; set; } = BorderStyle.Single;
+        public Form()
+        {
+            UnfocusedBorderStyle = BorderStyle.Single;
+            FocusedBorderStyle = BorderStyle.Double;
 
-        protected List<Control> Controls { get; } = new List<Control>();
+            Text = "Form";
+            Size = new Size(100, 25);
 
-        private BorderStyle BorderStyle => IsFocused ? FocusedBorderStyle : UnfocusedBorderStyle;
+            Initialize();
+
+            EventHolder.SendFormHasBeenCreated(this);
+        }
+
+        private IEnumerable<Control> AllControls => _focusingContorols.Union(_unfocusingControls);
 
         public override bool TryGetCellAt(Position position, out Cell cell)
         {
@@ -33,30 +44,36 @@ namespace ConsoleGUIApp.Controls
 
             Position relativePosition = position - Position;
 
-            if (TryGetBorderCell(relativePosition, out cell))
-                return true;
-
             if (TryGetControlCell(relativePosition, out cell))
                 return true;
 
             cell = new Cell().WithBackground(BackColor);
             return true;
+        }
 
-            throw new InvalidOperationException("can't get cell");
+        public void Add(Control control)
+        {
+            if (control.IsTopLevel)
+                throw new ArgumentException("TopLevelControlAdd");
+
+            if(control.IsCanFocus)
+                _focusingContorols.Add(control);
+            else
+                _unfocusingControls.Add(control);
         }
 
         public override void Focus()
         {
             base.Focus();
 
-            if (Controls.Count == 0)
+            if (_focusingContorols.Count == 0)
                 return;
 
             if (_activeControl == null)
             {
-                _activeControl = Controls[0];
-                Controls.RemoveAt(0);
-                Controls.Add(_activeControl);
+                _activeControl = _focusingContorols[0];
+                _focusingContorols.RemoveAt(0);
+                _focusingContorols.Add(_activeControl);
             }
 
             _activeControl.Focus();
@@ -71,34 +88,33 @@ namespace ConsoleGUIApp.Controls
 
         public override void OnInput(KeyInputEvent inputEvent)
         {
+            base.OnInput(inputEvent);
+
             switch (inputEvent.Key.Key)
             {
                 case ConsoleKey.Tab:
                     SwitchActiveControl();
                     break;
 
+                case ConsoleKey.Escape:
+                    Close();
+                    break;
+
                 default:
-                    _activeControl.OnInput(inputEvent);
+                    _activeControl?.OnInput(inputEvent);
                     break;
             }
         }
 
-        private bool TryGetBorderCell(Position relativePosition, out Cell cell)
-        {
-            Border border = BorderFactory.Get(BorderStyle);
+        protected override bool IsInOfTextBoxY(int relativePositionY) => relativePositionY == 0;
 
-            if (border.TryGet(relativePosition, Size, out cell))
-            {
-                cell = cell.WithBackground(BackColor);
-                return true;
-            }
+        protected void Close() => EventHolder.SendFormHasBeenClosed(this);
 
-            return false;
-        }
+        protected virtual void Initialize() { }
 
         private bool TryGetControlCell(Position relativePosition, out Cell cell)
         {
-            var sortByZIndexControls = Controls.OrderByDescending(drawable => drawable.ZIndex);
+            var sortByZIndexControls = AllControls.OrderByDescending(drawable => drawable.ZIndex);
 
             foreach (Control control in sortByZIndexControls)
             {
@@ -110,16 +126,14 @@ namespace ConsoleGUIApp.Controls
             return false;
         }
 
-        protected override bool IsInOfTextBoxY(int relativePositionY) => relativePositionY == 0;
-
         private void SwitchActiveControl()
         {
-            if(Controls.Count == 0)
+            if(_focusingContorols.Count == 0)
                 return;
 
-            Control control = Controls[0];
-            Controls.RemoveAt(0);
-            Controls.Add(control);
+            Control control = _focusingContorols[0];
+            _focusingContorols.RemoveAt(0);
+            _focusingContorols.Add(control);
 
             _activeControl.Unfocus();
             _activeControl = control;

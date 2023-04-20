@@ -1,4 +1,5 @@
 ﻿using ConsoleGUIApp.Controls;
+using ConsoleGUIApp.Data;
 using ConsoleGUIApp.Drawing;
 using ConsoleGUIApp.Input;
 using System;
@@ -7,9 +8,9 @@ using System.Threading;
 
 namespace ConsoleGUIApp.Core
 {
-    public class Application
+    public class Application: IDrawableContentHolder
     {
-        private Queue<Form> _forms;
+        private LinkedList<Form> _forms;
         private Form _activeForm;
 
         private ConsoleDrawer _drawer;
@@ -18,14 +19,26 @@ namespace ConsoleGUIApp.Core
 
         public Application(ConsoleColor consoleBackColor, List<Form> forms)
         {
-            _forms = new Queue<Form>(forms);
+            if (forms == null || forms.Count == 0)
+                throw new ArgumentNullException(nameof(forms));
 
-            List<IDrawable> drawables = new List<IDrawable>(forms);
-            _drawer = new ConsoleDrawer(consoleBackColor, drawables);
+            _forms = new LinkedList<Form>(forms);
 
-            _activeForm = _forms.Dequeue();
-            _activeForm.Focus();
+            _drawer = new ConsoleDrawer(consoleBackColor, this);
+
+            EventHolder.FormHasBeenCreated += OnFormHasBeenCreated;
+            EventHolder.FormHasBeenClosed += OnFormHasBeenClosed;
+
+            SwitchActiveForm();
         }
+
+        ~Application()
+        {
+            EventHolder.FormHasBeenCreated -= OnFormHasBeenCreated;
+            EventHolder.FormHasBeenClosed -= OnFormHasBeenClosed;
+        }
+
+        public IEnumerable<IDrawable> Drawables => _forms;
 
         public void Run()
         {
@@ -48,16 +61,48 @@ namespace ConsoleGUIApp.Core
 
                 if (key.Modifiers.HasFlag(ConsoleModifiers.Shift) && key.Key == ConsoleKey.Tab)
                 {
-                    _activeForm.Unfocus();
-                    _forms.Enqueue(_activeForm);
-                    _activeForm = _forms.Dequeue();
-                    _activeForm.Focus();
+                    SwitchActiveForm();
                 }
                 else
                 {
                     _activeForm.OnInput(new KeyInputEvent(key));
                 }
             }
+        }
+
+        private void SwitchActiveForm()
+        {
+            if(_activeForm != null)
+                _activeForm.Unfocus();
+
+            _activeForm = _forms.First.Value;
+            _activeForm.Focus();
+
+            _forms.RemoveFirst();
+            _forms.AddLast(_activeForm);
+        }
+
+        private void OnFormHasBeenCreated(Form form)
+        {
+            if (_activeForm != null)
+                _activeForm.Unfocus();
+
+            _activeForm = form;
+            _activeForm.Focus();
+            _forms.AddLast(_activeForm);
+        }
+
+        private void OnFormHasBeenClosed(Form closedForm)
+        {
+            _forms.Remove(closedForm);
+
+            if(_forms.Count == 0)
+            {
+                _isRunning = false;
+                return;
+            }
+
+            SwitchActiveForm();
         }
     }
 }

@@ -13,6 +13,9 @@ namespace ConsoleGUIApp.Controls
 
         public virtual string Text { get; set; }
 
+        public virtual bool IsCanFocus { get; set; } = true;
+        public virtual bool IsTopLevel => false;
+
         public Size Size
         {
             get => _size;
@@ -37,14 +40,19 @@ namespace ConsoleGUIApp.Controls
             }
         }
 
-        public ConsoleColor BackFocusedColor { get; set; }
-        public ConsoleColor BackUnfocusedColor { get; set; }
+
+        public ConsoleColor BackColor { get; set; } = ConsoleColor.White;
+        public ConsoleColor TextColor { get; set; } = ConsoleColor.Black;
+
+        public BorderStyle FocusedBorderStyle { get; set; } = BorderStyle.None;
+        public BorderStyle UnfocusedBorderStyle { get; set; } = BorderStyle.None;
+        public ConsoleColor BorderColor { get; set; } = ConsoleColor.Black;
 
         public bool IsFocused { get; protected set; }
 
         public int ZIndex { get; private set; } = 0;
 
-        protected ConsoleColor BackColor => IsFocused ? BackFocusedColor : BackUnfocusedColor;
+        private BorderStyle BorderStyle => IsFocused ? FocusedBorderStyle : UnfocusedBorderStyle;
 
         public virtual void OnInput(KeyInputEvent inputEvent) { }
 
@@ -53,6 +61,9 @@ namespace ConsoleGUIApp.Controls
             Position relativePosition = position - Position;
 
             if (TryGetTextCell(relativePosition, out cell))
+                return true;
+
+            if (TryGetBorderCell(relativePosition, out cell))
                 return true;
 
             return false;
@@ -75,15 +86,17 @@ namespace ConsoleGUIApp.Controls
 
         protected bool IsOutOfBox(Position position) => position.X < Position.X || position.X >= Position.X + Size.Width || position.Y < Position.Y || position.Y >= Position.Y + Size.Height;
 
-        private bool TryGetTextCell(Position relativePosition, out Cell cell)
+        protected virtual bool TryGetTextCell(Position relativePosition, out Cell cell)
         {
             if (string.IsNullOrEmpty(Text) == false)
             {
+                string text = " " + Text + " ";
                 if (IsInOfTextBox(relativePosition))
                 {
                     cell = new Cell()
-                        .WithContent(Text[relativePosition.X - ((Size.Width - 1) / 2 - (Text.Length - 1) / 2)])
-                        .WithBackground(BackColor);
+                        .WithContent(text[relativePosition.X - ((Size.Width - 1) / 2 - (text.Length - 1) / 2)])
+                        .WithBackground(BackColor)
+                        .WithForeground(TextColor);
                     return true;
                 }
             }
@@ -92,9 +105,24 @@ namespace ConsoleGUIApp.Controls
             return false;
         }
 
-        private bool IsInOfTextBox(Position relativePosition) => IsInOfTextBoxX(relativePosition.X) && IsInOfTextBoxY(relativePosition.Y);
+        protected bool IsInOfTextBox(Position relativePosition) => IsInOfTextBoxX(relativePosition.X) && IsInOfTextBoxY(relativePosition.Y);
 
-        protected virtual bool IsInOfTextBoxX(int relativePositionX) => relativePositionX >= (Size.Width - 1) / 2 - (Text.Length - 1) / 2 && relativePositionX <= (Size.Width - 1) / 2 + Text.Length / 2;
+        protected virtual bool IsInOfTextBoxX(int relativePositionX) => relativePositionX >= (Size.Width - 1) / 2 - (Text.Length + 1) / 2 && relativePositionX <= (Size.Width - 1) / 2 + (Text.Length + 2) / 2;
         protected virtual bool IsInOfTextBoxY(int relativePositionY) => relativePositionY == (Size.Height - 1) / 2;
+
+        protected virtual bool TryGetBorderCell(Position relativePosition, out Cell cell)
+        {
+            Border border = BorderFactory.Get(BorderStyle);
+
+            if (border.TryGet(relativePosition, Size, out cell))
+            {
+                cell = cell
+                    .WithBackground(BackColor)
+                    .WithForeground(BorderColor);
+                return true;
+            }
+
+            return false;
+        }
     }
 }
