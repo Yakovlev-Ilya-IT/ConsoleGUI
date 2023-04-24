@@ -87,7 +87,7 @@ namespace ConsoleGUIApp.Controls
                     break;
 
                 case ConsoleKey.Enter:
-                    Click.Invoke(_selectedIndex);
+                    Click?.Invoke(_selectedIndex);
                     break;
 
                 default:

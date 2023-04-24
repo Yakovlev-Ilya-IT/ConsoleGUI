@@ -1,8 +1,9 @@
 ﻿using ConsoleGUIApp.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Management;
 
 namespace ConsoleGUIApp.Controls.CustomForms
 {
@@ -16,7 +17,7 @@ namespace ConsoleGUIApp.Controls.CustomForms
             base.Initialize();
 
             int width = 150;
-            int height = 50;
+            int height = 25;
             Size = new Size(width, height);
 
             _names = new ListBox();
@@ -24,133 +25,128 @@ namespace ConsoleGUIApp.Controls.CustomForms
             _names = new ListBox();
             _names.Text = "Объекты";
             _names.Position = new Position(1, 2);
-            _names.Size = new Size(width / 4 - 2, height - 4);
+            _names.Size = new Size(width / 6 - 2, height - 4);
             _names.BackColor = ConsoleColor.White;
             _names.TextColor = ConsoleColor.Black;
             _names.BorderColor = ConsoleColor.Black;
-
-            _parametrs = new ListBox();
-            _parametrs.Text = "Параметры";
-            _parametrs.IsCanFocus = false;
-            _parametrs.Position = new Position(width / 4, 2);
-            _parametrs.Size = new Size(width * 3 / 4 - 2, height - 4);
 
             _names.SelectedIndexChanged += OnNamesSelectedIndexChanged;
 
             List<string> items = new List<string>()
             {
+                "Операционная система",
                 "Процессор",
-                "Видеокарта",
-                "Чипсет",
-                "Диск",
-                "Биос",
-                "Кэш",
-                "USB",
-                "Сеть",
-                "Пользователи",
+                "Логические диски",
+                "Стэк вызовов"
             };
 
             _names.AddRange(items);
-            _names.SetSelectedItem(0);
 
+            _parametrs = new ListBox();
+            _parametrs.Text = "Параметры";
+            _parametrs.IsCanFocus = false;
+            _parametrs.Position = new Position(width / 6, 2);
+            _parametrs.Size = new Size(width * 5 / 6 - 2, height - 4);
+
+            _names.SetSelectedItem(0);
             Add(_names);
             Add(_parametrs);
         }
 
         private void OnNamesSelectedIndexChanged(int index)
         {
-            string item = _names.Items.ElementAt(index);
-            string key = "";
-            switch (item)
+            _parametrs.Clear();
+
+            switch (index)
             {
-                case "Процессор":
-                    key = "Win32_Processor";
+                case 0:
+                    ShowOSInfo();
                     break;
-                case "Видеокарта":
-                    key = "Win32_VideoController";
+
+                case 1:
+                    ShowProcessorInfo();
                     break;
-                case "Чипсет":
-                    key = "Win32_IDEController";
+
+                case 2:
+                    ShowLogicalDrivesInfo();
                     break;
-                case "Диск":
-                    key = "Win32_DiskDrive";
-                    break;
-                case "Биос":
-                    key = "Win32_BIOS";
-                    break;
-                case "Оперативная память":
-                    key = "Win32_PhysicalMemory";
-                    break;
-                case "USB":
-                    key = "Win32_USBController";
-                    break;
-                case "Кэш":
-                    key = "Win32_CacheMemory";
-                    break;
-                case "Сеть":
-                    key = "Win32_NetworkAdapter";
-                    break;
-                case "Пользователи":
-                    key = "Win32_Account";
+
+                case 3:
+                    ShowStackTrace();
                     break;
 
                 default:
-                    throw new ArgumentException("item");
+                    break;
             }
-
-            SetHardWareInfo(key);
         }
 
-        private void SetHardWareInfo(string key)
+        private void ShowOSInfo()
         {
-            _parametrs.Clear();
+            _parametrs.Text = "Информация об операционной системе";
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM " + key);
-
-            foreach (ManagementObject obj in searcher.Get())
+            List<string> items = new List<string>()
             {
-                try
-                {
-                    _parametrs.Text = obj["Name"].ToString().Trim();
-                }
-                catch (Exception ex)
-                {
-                    _parametrs.Text = obj.ToString();
-                }
+                $"Операционная система:  {Environment.OSVersion}",
+                $"Платформа:  {Environment.OSVersion.Platform}",
+                $"Версия:  {Environment.OSVersion.Version}",
+                string.Format("64 Bit операционная система: {0}", Environment.Is64BitOperatingSystem ? "Да" : "Нет"),
+                $"Имя компьютера: {Environment.MachineName}",
+                $"Имя пользователя: {Environment.UserName}",
+                $"Доменное имя пользователя: {Environment.UserDomainName}",
+            };
 
-                foreach(PropertyData data in obj.Properties)
-                {
-                    string item = data.Name.ToUpper() + " : ";
+            _parametrs.AddRange(items);
+        }
 
-                    if(data.Value != null && !string.IsNullOrEmpty(data.Value.ToString()))
-                    {
-                        switch (data.Value.GetType().ToString())
-                        {
-                            case "System.String[]":
-                                string[] stringData = data.Value as string[];
-                                string result = string.Empty;
-                                foreach (string str in stringData)
-                                    result += $"{str} ";
-                                item += result;
-                                break;
+        private void ShowProcessorInfo()
+        {
+            _parametrs.Text = "Информация о процессоре";
 
-                            case "System.UInt16[]":
-                                ushort[] ushortData = data.Value as ushort[];
-                                string result1 = string.Empty;
-                                foreach (ushort val in ushortData)
-                                    result1 += $"{Convert.ToString(val)}";
-                                item += result1;
-                                break;
-                            default:
-                                item += data.Value.ToString();
-                                break;
-                        }
+            List<string> items = new List<string>()
+            {
+                $"Разрядность процессора: {Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE")}",
+                $"Модель процессора: {Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")}",
+                $"Число процессоров: {Environment.ProcessorCount}",
+            };
 
-                        _parametrs.AddItem(item);
-                    }
-                }
+            _parametrs.AddRange(items);
+        }
 
+        private void ShowLogicalDrivesInfo()
+        {
+            _parametrs.Text = "Информация о логических дисках";
+
+            string driveInfo = "";
+
+            foreach (DriveInfo dI in DriveInfo.GetDrives())
+            {
+                driveInfo += string.Format(
+                      "Диск: {0}\r\n" +
+                      "Формат диска: {1}\r\n" +
+                      "Размер диска (ГБ): {2}\r\n" +
+                      "Доступное свободное место (ГБ): {3}\r\n",
+                      dI.Name, dI.DriveFormat, (double)dI.TotalSize / 1024 / 1024 / 1024, (double)dI.AvailableFreeSpace / 1024 / 1024 / 1024);
             }
+
+            string[] strings = driveInfo.Split("\r\n");
+
+            List<string> items = new List<string>(strings);
+
+            _parametrs.AddRange(items);
+        }
+
+        private void ShowStackTrace()
+        {
+            _parametrs.Text = "Информация о стэке вызовов";
+
+            string[] strings = Environment.StackTrace.Split("\r\n");
+
+            for (int i = 0; i < strings.Length; i++)
+                strings[i] = strings[i].Trim();
+
+            List<string> items = new List<string>(strings);
+
+            _parametrs.AddRange(items);
         }
     }
 }

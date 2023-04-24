@@ -49,7 +49,7 @@ namespace ConsoleGUIApp.Controls
             if (fillingValue > Size.Width)
                 fillingValue = Size.Width;
 
-            if(relativePosition.X <= fillingValue)
+            if(relativePosition.X < fillingValue)
                 cell = new Cell().WithBackground(FillColor);
             else
                 cell = new Cell().WithBackground(BackColor);

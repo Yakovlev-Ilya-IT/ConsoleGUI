@@ -4,12 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Platforms>AnyCPU;x64;ARM64</Platforms>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenHardwareMonitorLibCore" Version="1.0.2" />
-    <PackageReference Include="System.Management" Version="7.0.1" />
+    <Folder Include="Utils\" />
   </ItemGroup>
 
 </Project>

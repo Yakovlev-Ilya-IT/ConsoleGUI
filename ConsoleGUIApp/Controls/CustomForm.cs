@@ -25,7 +25,7 @@ namespace ConsoleGUIApp.Controls
             firstButton.Click += OnFirstButtonClick;
 
             Button secondButton = new Button();
-            secondButton.Text = "Загрузка системы";
+            secondButton.Text = "Сетевые адаптеры";
             secondButton.Size = new Size(Size.Width / 3, 3);
             secondButton.Position = new Position(Size.Width / 2 + 5, 4);
             secondButton.Click += OnSecondButtonClick;
@@ -44,9 +44,9 @@ namespace ConsoleGUIApp.Controls
 
         private void OnSecondButtonClick()
         {
-            UsageInfoForm usageInfoForm = new UsageInfoForm();
-            usageInfoForm.Text = "Загрузка системы";
-            usageInfoForm.Position = new Position(165, 5);
+            NetworkInfoForm usageInfoForm = new NetworkInfoForm();
+            usageInfoForm.Text = "Сетевые адаптеры";
+            usageInfoForm.Position = new Position(40, 10);
         }
     }
 }

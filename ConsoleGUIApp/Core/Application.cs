@@ -1,5 +1,4 @@
 ﻿using ConsoleGUIApp.Controls;
-using ConsoleGUIApp.Data;
 using ConsoleGUIApp.Drawing;
 using ConsoleGUIApp.Input;
 using System;
