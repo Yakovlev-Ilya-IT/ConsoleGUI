@@ -10,8 +10,6 @@ namespace ConsoleGUIApp
     {
         static void Main(string[] args)
         {
-            SafeConsole.UpdateSize(new Size(220, 65));
-            SafeConsole.SetUtf8();
             CustomForm form = new CustomForm();
             form.Text = "Форма выбора";
 
