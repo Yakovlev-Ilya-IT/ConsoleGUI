@@ -39,30 +39,32 @@ namespace ConsoleGUILib.Controls
 
             Position relativePosition = position - Position;
 
-            for (int i = 0; i < _items.Count; i++)
+            int shift = 0;
+
+            if (_selectedIndex > Size.Height - 3)
+                shift = _selectedIndex - (Size.Height - 3);
+
+            if(_items.Count != 0 && relativePosition.Y - 1 < _items.Count)
             {
-                if(relativePosition.Y >= i && relativePosition.Y <= (i+1))
+                if (string.IsNullOrEmpty(_items[relativePosition.Y - 1 + shift]) == false)
                 {
-                    if (string.IsNullOrEmpty(_items[i]) == false)
+                    if (relativePosition.X <= _items[relativePosition.Y - 1 + shift].Length && relativePosition.X > 0)
                     {
-                        if (relativePosition.X <= _items[i].Length && relativePosition.X > 0)
-                        {
-                            cell = new Cell()
-                                .WithContent(_items[i][relativePosition.X - 1])
-                                .WithForeground(TextColor);
-                        }
-                        else
-                        {
-                            cell = new Cell();
-                        }
-
-                        if (i == _selectedIndex)
-                            cell = cell.WithBackground(SelectedItemColor);
-                        else
-                            cell = cell.WithBackground(BackColor);
-
-                        return true;
+                        cell = new Cell()
+                            .WithContent(_items[relativePosition.Y - 1 + shift][relativePosition.X - 1])
+                            .WithForeground(TextColor);
                     }
+                    else
+                    {
+                        cell = new Cell();
+                    }
+
+                    if (relativePosition.Y - 1 + shift == _selectedIndex)
+                        cell = cell.WithBackground(SelectedItemColor);
+                    else
+                        cell = cell.WithBackground(BackColor);
+
+                    return true;
                 }
             }
 

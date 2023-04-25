@@ -11,8 +11,6 @@ namespace ConsoleGUILib.Controls
         private List<Control> _focusingContorols = new List<Control>();
         private List<Control> _unfocusingControls = new List<Control>();
 
-        public override bool IsTopLevel => true;
-
         public Form()
         {
             UnfocusedBorderStyle = BorderStyle.Single;
@@ -25,6 +23,9 @@ namespace ConsoleGUILib.Controls
 
             EventHolder.SendFormHasBeenCreated(this);
         }
+
+        public bool IsModal { get; set; }
+        public override bool IsTopLevel => true;
 
         private IEnumerable<Control> AllControls => _focusingContorols.Union(_unfocusingControls);
 

@@ -69,7 +69,13 @@ namespace ConsoleGUILib.Core
         private void SwitchActiveForm()
         {
             if(_activeForm != null)
+            {
+                if (_activeForm.IsModal)
+                    if (_forms.Contains(_activeForm))
+                        return;
+
                 _activeForm.Unfocus();
+            }
 
             _activeForm = _forms.First.Value;
             _activeForm.Focus();

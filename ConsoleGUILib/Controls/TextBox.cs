@@ -1,6 +1,7 @@
 ﻿using ConsoleGUILib.Data;
 using ConsoleGUILib.Drawing;
 using ConsoleGUILib.Input;
+using System.Text;
 
 namespace ConsoleGUILib.Controls
 {
@@ -12,6 +13,7 @@ namespace ConsoleGUILib.Controls
         };
 
         private int _caretY = 0;
+        private int _caretX = 0;
 
         public TextBox()
         {
@@ -22,6 +24,25 @@ namespace ConsoleGUILib.Controls
             BorderColor = ConsoleColor.White;
             BackColor = ConsoleColor.DarkGray;
             TextColor = TextFieldForegroundColor = ConsoleColor.White;
+        }
+
+        public override string Text
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in _text)
+                    sb.Append(item + "\r\n");
+                return sb.ToString();
+            }
+            set
+            {
+                if (value == null)
+                    value = "";
+                _text = new List<string>(value.Split("\r\n"));
+                _caretY = _text.Count - 1;
+                _caretX = _text[_text.Count - 1].Length;
+            }
         }
 
         public ConsoleColor TextFieldForegroundColor { get; set; }
@@ -39,21 +60,33 @@ namespace ConsoleGUILib.Controls
 
             Position relativePosition = position - Position;
 
-            if(relativePosition.Y >= 0 && relativePosition.Y <= _text.Count)
+            int shift = 0;
+
+            if (_caretY > Size.Height - 3)
+                shift = _caretY - (Size.Height - 3);
+
+            if (_text.Count != 0 && relativePosition.Y - 1 < _text.Count)
             {
-                if(relativePosition.X <= _text[relativePosition.Y-1].Length)
+                if (relativePosition.Y >= 0)
                 {
-                    cell = new Cell()
-                        .WithBackground(BackColor)
-                        .WithForeground(TextFieldForegroundColor)
-                        .WithContent(_text[relativePosition.Y-1][relativePosition.X-1]);
-                    return true;
-                }         
+                    if (relativePosition.X <= _text[relativePosition.Y - 1 + shift].Length)
+                    {
+                        cell = new Cell()
+                            .WithBackground(BackColor)
+                            .WithForeground(TextFieldForegroundColor)
+                            .WithContent(_text[relativePosition.Y - 1 + shift][relativePosition.X - 1]);
+
+                        if (relativePosition.Y - 1 + shift == _caretY && IsFocused && relativePosition.X - 1 == _caretX)
+                            cell = cell.WithBackground(ConsoleColor.Red);
+
+                        return true;
+                    }
+                }
             }
 
-            if(relativePosition.Y - 1 == _caretY && IsFocused)
+            if (relativePosition.Y - 1 + shift == _caretY && IsFocused)
             {
-                if (relativePosition.X - 1 == _text[_caretY].Length)
+                if (relativePosition.X - 1 == _caretX)
                 {
                     cell = new Cell().WithBackground(ConsoleColor.Red);
                     return true;
@@ -71,8 +104,9 @@ namespace ConsoleGUILib.Controls
             switch (inputEvent.Key.Key)
             {
                 case ConsoleKey.Enter:
-                    _text.Add(string.Empty);
                     _caretY++;
+                    _caretX = 0;
+                    _text.Insert(_caretY, string.Empty);
                     break;
 
                 case ConsoleKey.Backspace:
@@ -82,18 +116,60 @@ namespace ConsoleGUILib.Controls
 
                         _text.RemoveAt(_caretY);
                         _caretY--;
+                        _caretX = _text[_caretY].Length;
                         return;
                     }
 
                     _text[_caretY] = _text[_caretY].Remove(_text[_caretY].Length - 1);
+                    _caretX--;
+                    break;
+
+                case ConsoleKey.UpArrow:
+                    if (_caretY == 0)
+                        return;
+                    _caretY--;
+
+                    if(_caretX > _text[_caretY].Length)
+                        _caretX = _text[_caretY].Length;
+
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    if (_caretY == _text.Count - 1)
+                        return;
+                    _caretY++;
+                    if (_caretX > _text[_caretY].Length)
+                        _caretX = _text[_caretY].Length;
+                    break;
+
+                case ConsoleKey.RightArrow:
+                    if (_caretX == _text[_caretY].Length)
+                        return;
+
+                    _caretX++;
+                    break;
+
+                case ConsoleKey.LeftArrow:
+                    if (_caretX == 0)
+                        return;
+
+                    _caretX--;
                     break;
 
                 default:
-                    _text[_caretY] += inputEvent.Key.KeyChar.ToString();
+                    if(inputEvent.Key.KeyChar.ToString() != "\0")
+                    {
+                        _text[_caretY] = _text[_caretY].Insert(_caretX, inputEvent.Key.KeyChar.ToString());
+                        _caretX++;
+                    }
                     break;
             }
         }
 
-        protected override bool IsInOfTextBoxY(int relativePositionY) => relativePositionY == 0;
+        protected override bool TryGetTextCell(Position relativePosition, out Cell cell)
+        {
+            cell = null;
+            return false;
+        }
     }
 }
