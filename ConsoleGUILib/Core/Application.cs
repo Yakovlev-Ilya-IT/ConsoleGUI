@@ -1,8 +1,8 @@
-﻿using ConsoleGUIApp.Controls;
-using ConsoleGUIApp.Drawing;
-using ConsoleGUIApp.Input;
+﻿using ConsoleGUILib.Controls;
+using ConsoleGUILib.Drawing;
+using ConsoleGUILib.Input;
 
-namespace ConsoleGUIApp.Core
+namespace ConsoleGUILib.Core
 {
     public class Application: IDrawableContentHolder
     {

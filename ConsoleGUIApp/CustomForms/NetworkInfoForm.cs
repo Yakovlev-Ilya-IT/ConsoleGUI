@@ -1,10 +1,11 @@
-﻿using ConsoleGUIApp.Data;
+﻿using ConsoleGUILib.Controls;
+using ConsoleGUILib.Data;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Threading;
 
-namespace ConsoleGUIApp.Controls.CustomForms
+namespace ConsoleGUIApp.CustomForms
 {
     public class NetworkInfoForm: Form
     {

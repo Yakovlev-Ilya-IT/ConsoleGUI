@@ -1,6 +1,6 @@
-﻿using ConsoleGUIApp.Controls;
-using ConsoleGUIApp.Core;
-using ConsoleGUIApp.Data;
+﻿using ConsoleGUIApp.CustomForms;
+using ConsoleGUILib.Controls;
+using ConsoleGUILib.Core;
 using System;
 using System.Collections.Generic;
 

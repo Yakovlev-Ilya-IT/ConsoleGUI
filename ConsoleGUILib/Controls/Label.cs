@@ -1,7 +1,6 @@
-﻿using ConsoleGUIApp.Data;
-using System;
+﻿using ConsoleGUILib.Data;
 
-namespace ConsoleGUIApp.Controls
+namespace ConsoleGUILib.Controls
 {
     public class Label: Control
     {

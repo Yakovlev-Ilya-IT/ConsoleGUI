@@ -1,7 +1,7 @@
-﻿using ConsoleGUIApp.Controls;
+﻿using ConsoleGUILib.Controls;
 using System;
 
-namespace ConsoleGUIApp.Core
+namespace ConsoleGUILib.Core
 {
     public static class EventHolder
     {

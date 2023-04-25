@@ -1,7 +1,6 @@
-﻿using ConsoleGUIApp.Data;
-using System;
+﻿using ConsoleGUILib.Data;
 
-namespace ConsoleGUIApp.Drawing
+namespace ConsoleGUILib.Drawing
 {
     public class DoubleBorder: Border
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConsoleGUIApp.Drawing
+﻿namespace ConsoleGUILib.Drawing
 {
     public static class BorderFactory
     {

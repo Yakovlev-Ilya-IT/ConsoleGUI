@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ConsoleGUIApp.Drawing
+﻿namespace ConsoleGUILib.Drawing
 {
     public interface IDrawableContentHolder
     {

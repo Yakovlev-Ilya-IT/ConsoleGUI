@@ -1,11 +1,10 @@
-﻿using ConsoleGUIApp.Data;
+﻿using ConsoleGUILib.Controls;
+using ConsoleGUILib.Data;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
-namespace ConsoleGUIApp.Controls.CustomForms
+namespace ConsoleGUIApp.CustomForms
 {
     public class PCInfoForm: Form
     {

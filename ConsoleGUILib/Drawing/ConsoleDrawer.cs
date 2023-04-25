@@ -1,10 +1,6 @@
-﻿using ConsoleGUIApp.Core;
-using ConsoleGUIApp.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ConsoleGUILib.Data;
 
-namespace ConsoleGUIApp.Drawing
+namespace ConsoleGUILib.Drawing
 {
     public class ConsoleDrawer
     {

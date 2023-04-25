@@ -1,12 +1,9 @@
-﻿using ConsoleGUIApp.Core;
-using ConsoleGUIApp.Data;
-using ConsoleGUIApp.Drawing;
-using ConsoleGUIApp.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ConsoleGUILib.Core;
+using ConsoleGUILib.Data;
+using ConsoleGUILib.Drawing;
+using ConsoleGUILib.Input;
 
-namespace ConsoleGUIApp.Controls
+namespace ConsoleGUILib.Controls
 {
     public class Form: Control
     {

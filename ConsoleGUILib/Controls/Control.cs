@@ -1,9 +1,8 @@
-﻿using ConsoleGUIApp.Data;
-using ConsoleGUIApp.Drawing;
-using ConsoleGUIApp.Input;
-using System;
+﻿using ConsoleGUILib.Data;
+using ConsoleGUILib.Drawing;
+using ConsoleGUILib.Input;
 
-namespace ConsoleGUIApp.Controls
+namespace ConsoleGUILib.Controls
 {
     public abstract class Control : IDrawable, IKeyInputListener
     {

@@ -1,8 +1,6 @@
-﻿using ConsoleGUIApp.Data;
-using ConsoleGUIApp.Drawing;
-using System;
+﻿using ConsoleGUILib.Data;
 
-namespace ConsoleGUIApp.Controls
+namespace ConsoleGUILib.Controls
 {
     public class ProgressBar : Control
     {

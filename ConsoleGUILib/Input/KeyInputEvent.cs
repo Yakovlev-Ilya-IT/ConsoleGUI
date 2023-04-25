@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConsoleGUIApp.Input
+﻿namespace ConsoleGUILib.Input
 {
     public class KeyInputEvent
     {

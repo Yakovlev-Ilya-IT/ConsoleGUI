@@ -1,6 +1,6 @@
-﻿using ConsoleGUIApp.Data;
+﻿using ConsoleGUILib.Data;
 
-namespace ConsoleGUIApp.Drawing
+namespace ConsoleGUILib.Drawing
 {
     public abstract class Border
     {

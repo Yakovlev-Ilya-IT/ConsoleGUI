@@ -1,4 +1,4 @@
-﻿namespace ConsoleGUIApp.Drawing
+﻿namespace ConsoleGUILib.Drawing
 {
     public enum BorderStyle
     {

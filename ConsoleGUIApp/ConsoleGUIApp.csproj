@@ -13,4 +13,8 @@
     <None Remove="Utils\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleGUILib\ConsoleGUILib.csproj" />
+  </ItemGroup>
+
 </Project>

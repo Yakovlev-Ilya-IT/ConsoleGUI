@@ -1,6 +1,4 @@
-﻿
-
-namespace ConsoleGUIApp.Input
+﻿namespace ConsoleGUILib.Input
 {
     public interface IKeyInputListener
     {

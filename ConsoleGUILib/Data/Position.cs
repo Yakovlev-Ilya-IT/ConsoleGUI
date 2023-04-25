@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConsoleGUIApp.Data
+﻿namespace ConsoleGUILib.Data
 {
     public struct Position
     {

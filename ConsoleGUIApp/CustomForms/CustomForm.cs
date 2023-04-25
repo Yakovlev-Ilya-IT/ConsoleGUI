@@ -1,16 +1,14 @@
-﻿using ConsoleGUIApp.Controls.CustomForms;
-using ConsoleGUIApp.Core;
-using ConsoleGUIApp.Data;
+﻿using ConsoleGUILib.Controls;
+using ConsoleGUILib.Data;
 using System;
-using System.Linq;
 
-namespace ConsoleGUIApp.Controls
+namespace ConsoleGUIApp.CustomForms
 {
     public class CustomForm: Form
     {
         public CustomForm(): base()
         {
-            Size = new Size(Console.WindowWidth / 3, 10);
+            Size = new Size(100, 10);
             Position = new Position(Console.WindowWidth / 2 - Size.Width / 2, Console.WindowHeight/ 2 - Size.Height / 2);
 
             Label label = new Label();
@@ -37,7 +35,7 @@ namespace ConsoleGUIApp.Controls
 
         private void OnFirstButtonClick()
         {
-            PCInfoForm pCInfoForm = new PCInfoForm();
+            TextEditorForm pCInfoForm = new TextEditorForm();
             pCInfoForm.Text = "Информация о ПК";
             pCInfoForm.Position = new Position(10, 5);
         }
