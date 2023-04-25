@@ -20,6 +20,9 @@ namespace ConsoleGUIApp
 
             Application application = new Application(ConsoleColor.Black, forms);
             application.Run();
+
+            Console.SetCursorPosition(0, 0);
+            Console.CursorVisible = false;
         }
     }
 }
