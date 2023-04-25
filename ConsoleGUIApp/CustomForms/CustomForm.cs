@@ -35,7 +35,7 @@ namespace ConsoleGUIApp.CustomForms
 
         private void OnFirstButtonClick()
         {
-            TextEditorForm pCInfoForm = new TextEditorForm();
+            PCInfoForm pCInfoForm = new PCInfoForm();
             pCInfoForm.Text = "Информация о ПК";
             pCInfoForm.Position = new Position(10, 5);
         }
